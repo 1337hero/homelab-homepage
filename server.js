@@ -3,11 +3,22 @@ import { fetchEvents } from "./api/calendar"
 
 const PORT = process.env.PORT || 4000
 const DIST = "./dist"
+const SERVICES_PATH = "./data/services.json"
 
 Bun.serve({
   port: PORT,
 
   routes: {
+    "/api/services": async () => {
+      try {
+        const file = Bun.file(SERVICES_PATH)
+        const data = await file.json()
+        return Response.json(data)
+      } catch (e) {
+        console.error("services error:", e)
+        return Response.json({ error: "Failed to load services" }, { status: 500 })
+      }
+    },
     "/api/stats": async () => {
       try {
         const stats = await getStats()

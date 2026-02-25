@@ -10,6 +10,7 @@ WORKDIR /app
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/server.js ./
 COPY --from=build /app/api ./api
+COPY --from=build /app/data ./data
 COPY --from=build /app/package.json ./
 COPY --from=build /app/bun.lock ./
 RUN bun install --frozen-lockfile --production

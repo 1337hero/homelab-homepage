@@ -2,6 +2,7 @@ import { defineConfig } from "vite"
 import preact from "@preact/preset-vite"
 import tailwindcss from "@tailwindcss/vite"
 import path from "path"
+import fs from "fs"
 import { getStats } from "./api/stats"
 import { fetchEvents } from "./api/calendar"
 
@@ -9,6 +10,16 @@ function apiPlugin() {
   return {
     name: "homepage-api",
     configureServer(server) {
+      server.middlewares.use("/api/services", async (_req, res) => {
+        try {
+          const data = fs.readFileSync(path.resolve(__dirname, "data/services.json"), "utf-8")
+          res.setHeader("Content-Type", "application/json")
+          res.end(data)
+        } catch (e) {
+          res.statusCode = 500
+          res.end(JSON.stringify({ error: "Failed to load services" }))
+        }
+      })
       server.middlewares.use("/api/stats", async (_req, res) => {
         try {
           const stats = await getStats()

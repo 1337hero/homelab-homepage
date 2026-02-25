@@ -3,11 +3,12 @@ import HeroSection from "@/components/dashboard/HeroSection";
 import SearchBar from "@/components/dashboard/SearchBar";
 import ServiceGrid from "@/components/dashboard/ServiceGrid";
 import StatsPanel from "@/components/dashboard/StatsPanel";
-import { services } from "@/data/services";
+import { useServices } from "@/hooks/useServices";
 import { useStats } from "@/hooks/useStats";
 import { useState } from "preact/hooks";
 
 export default function Dashboard() {
+  const { services } = useServices()
   const { stats, error } = useStats(3000)
   const [search, setSearch] = useState("")
   const onlineCount = services.filter((s) => s.status === "online").length

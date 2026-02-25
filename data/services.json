@@ -1,0 +1,143 @@
+[
+  {
+    "name": "Knitly",
+    "icon": "ri-hashtag",
+    "url": "https://app.knitly.io",
+    "category": "media",
+    "color": "#E8594E",
+    "description": "Our Social Media",
+    "status": "online",
+    "order": 0
+  },
+  {
+    "name": "Plex",
+    "icon": "ri-movie-2-line",
+    "url": "http://192.168.1.5:32400/web/index.html#!/",
+    "category": "media",
+    "color": "#E5A00D",
+    "description": "Movies & TV Shows",
+    "status": "online",
+    "order": 1
+  },
+  {
+    "name": "Music",
+    "icon": "ri-music-2-line",
+    "url": "http://music.mk3y.com/app/#/login",
+    "category": "media",
+    "color": "#0EA5E9",
+    "description": "Music Streaming",
+    "status": "online",
+    "order": 2
+  },
+  {
+    "name": "Audio Books",
+    "icon": "ri-headphone-line",
+    "url": "http://192.168.1.3:3002",
+    "category": "media",
+    "color": "#8B5CF6",
+    "description": "Audiobooks & Podcasts",
+    "status": "online",
+    "order": 3
+  },
+  {
+    "name": "Book Library",
+    "icon": "ri-book-open-line",
+    "url": "http://192.168.1.3:3003",
+    "category": "media",
+    "color": "#10B981",
+    "description": "E-Book Library",
+    "status": "online",
+    "order": 4
+  },
+  {
+    "name": "Minecraft",
+    "icon": "ri-gamepad-line",
+    "category": "media",
+    "color": "#84CC16",
+    "description": "Java & Bedrock Geyser Server",
+    "status": "online",
+    "order": 5,
+    "type": "info",
+    "details": { "host": "192.168.1.3", "bedrock": "19132", "java": "55126" }
+  },
+  {
+    "name": "Immich",
+    "icon": "ri-image-line",
+    "url": "http://100.64.0.6",
+    "category": "family",
+    "color": "#6366F1",
+    "description": "Family Photos",
+    "status": "online",
+    "order": 4
+  },
+  {
+    "name": "Fitness",
+    "icon": "ri-heart-pulse-line",
+    "url": "http://fitness.mk3y.com",
+    "category": "family",
+    "color": "#F43F5E",
+    "description": "Health & Fitness",
+    "status": "online",
+    "order": 3
+  },
+  {
+    "name": "Karakeep",
+    "icon": "ri-bookmark-3-line",
+    "url": "http://karakeep.home.local",
+    "category": "family",
+    "color": "#F59E0B",
+    "description": "Bookmarks",
+    "status": "online",
+    "order": 1
+  },
+  {
+    "name": "Dockge",
+    "icon": "ri-ship-line",
+    "url": "http://dockge.mk3y.com",
+    "category": "infrastructure",
+    "color": "#06B6D4",
+    "description": "Container Management",
+    "status": "online",
+    "order": 0
+  },
+  {
+    "name": "Pi-Hole",
+    "icon": "ri-shield-check-line",
+    "url": "http://pihole.mk3y.com",
+    "category": "infrastructure",
+    "color": "#EF4444",
+    "description": "DNS & Ad Blocking",
+    "status": "online",
+    "order": 1
+  },
+  {
+    "name": "Proxmox",
+    "icon": "ri-server-line",
+    "url": "http://proxmox.home.local",
+    "category": "infrastructure",
+    "color": "#E97627",
+    "description": "Virtualization",
+    "status": "warning",
+    "order": 2
+  },
+  {
+    "name": "Headscale",
+    "icon": "ri-route-line",
+    "url": "http://headscale.home.local",
+    "category": "infrastructure",
+    "color": "#3B82F6",
+    "description": "VPN Mesh Network",
+    "status": "online",
+    "order": 3
+  },
+  {
+    "name": "FasterChat",
+    "icon": "ri-chat-smile-2-line",
+    "url": "http://fasterchat.home.local",
+    "category": "family",
+    "color": "#A855F7",
+    "description": "AI Chat Interface",
+    "status": "online",
+    "order": 0
+  }
+]
