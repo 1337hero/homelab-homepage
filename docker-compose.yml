@@ -1,0 +1,13 @@
+services:
+  homepage:
+    build: .
+    ports:
+      - "5000:4000"
+    pid: host
+    volumes:
+      - /sys:/sys:ro
+      - /:/hostfs:ro
+    environment:
+      - HOST_FS=/hostfs
+      - ICAL_URL=${ICAL_URL}
+    restart: unless-stopped

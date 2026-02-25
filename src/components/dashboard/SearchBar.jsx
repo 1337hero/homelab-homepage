@@ -15,7 +15,7 @@ export default function SearchBar({ value, onInput, onClear }) {
           value={value}
           onInput={onInput}
           class="search-focus w-full pl-14 pr-5 py-4 rounded-2xl bg-white border-2 border-border
-                 font-nunito text-lg text-brown-800 placeholder-brown-300
+                 font-body text-lg text-brown-800 placeholder-brown-300
                  outline-none transition-all duration-200"
         />
         {value && (

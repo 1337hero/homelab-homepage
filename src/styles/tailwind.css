@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-  --font-fredoka: "Fredoka", sans-serif;
-  --font-nunito: "Nunito", sans-serif;
+  --font-display: "Lora", serif;
+  --font-body: "Nunito Sans", sans-serif;
   --font-mono: "DM Mono", monospace;
 
-  --color-cream: #FFF8F0;
+  --color-cream: #F7F5F3;
   --color-cream-dark: #F3E8D8;
   --color-brown-900: #1A120B;
   --color-brown-800: #3D3226;
@@ -18,6 +18,7 @@
   --color-border-light: #F0E6D9;
   --color-border-hover: #DDD0C0;
   --color-nav-border: #F3E8D8;
+  --color-knitly: #E8594E;
 }
 
 *, *::before, *::after {

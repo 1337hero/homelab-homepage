@@ -1,5 +1,4 @@
 import { useEffect, useState } from "preact/hooks"
-import { getMockStats } from "@/data/stats"
 
 function deriveStats(raw) {
   return {
@@ -11,12 +10,30 @@ function deriveStats(raw) {
 }
 
 export function useStats(interval = 3000) {
-  const [stats, setStats] = useState(() => deriveStats(getMockStats()))
+  const [stats, setStats] = useState(null)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    const id = setInterval(() => setStats(deriveStats(getMockStats())), interval)
-    return () => clearInterval(id)
+    let active = true
+
+    async function fetchStats() {
+      try {
+        const res = await fetch("/api/stats")
+        if (!res.ok) throw new Error(res.statusText)
+        const raw = await res.json()
+        if (active) {
+          setStats(deriveStats(raw))
+          setError(null)
+        }
+      } catch (e) {
+        if (active) setError(e.message)
+      }
+    }
+
+    fetchStats()
+    const id = setInterval(fetchStats, interval)
+    return () => { active = false; clearInterval(id) }
   }, [interval])
 
-  return stats
+  return { stats, error }
 }

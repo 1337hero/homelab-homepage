@@ -1,5 +1,5 @@
-import { CATEGORY_THEMES } from "@/constants/theme"
 import ServiceTile from "@/components/dashboard/ServiceTile"
+import { CATEGORY_THEMES } from "@/constants/theme"
 
 export default function ServiceGrid({ services }) {
   const categories = [...new Set(services.map((s) => s.category))]
@@ -8,7 +8,7 @@ export default function ServiceGrid({ services }) {
     <div class="space-y-10">
       {categories.map((cat, catIdx) => {
         const theme = CATEGORY_THEMES[cat]
-        const catServices = services.filter((s) => s.category === cat)
+        const catServices = services.filter((s) => s.category === cat).sort((a, b) => a.order - b.order)
 
         return (
           <section key={cat}>
@@ -18,7 +18,7 @@ export default function ServiceGrid({ services }) {
             >
               <span class="text-2xl" aria-hidden="true">{theme.emoji}</span>
               <h2
-                class="font-fredoka text-2xl font-semibold"
+                class="font-display text-2xl font-semibold"
                 style={{ color: theme.color }}
               >
                 {theme.label}
@@ -34,7 +34,6 @@ export default function ServiceGrid({ services }) {
                 <ServiceTile
                   key={service.name}
                   service={service}
-                  categoryColor={theme.color}
                   delay={0.3 + catIdx * 0.1 + i * 0.06}
                 />
               ))}
@@ -46,10 +45,10 @@ export default function ServiceGrid({ services }) {
       {services.length === 0 && (
         <div class="animate-bounce-in text-center py-16">
           <div class="text-6xl mb-4">🔍</div>
-          <p class="font-fredoka text-2xl text-brown-500 mb-2">
+          <p class="font-display text-2xl text-brown-500 mb-2">
             Nothing found!
           </p>
-          <p class="font-nunito text-brown-400">
+          <p class="font-body text-brown-400">
             Try a different search term
           </p>
         </div>

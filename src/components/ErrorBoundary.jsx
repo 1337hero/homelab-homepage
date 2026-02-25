@@ -13,15 +13,15 @@ export default class ErrorBoundary extends Component {
         <div class="min-h-screen flex items-center justify-center bg-cream">
           <div class="text-center p-8">
             <div class="text-5xl mb-4">😵</div>
-            <h1 class="font-fredoka text-2xl font-semibold text-brown-800 mb-2">
+            <h1 class="font-display text-2xl font-semibold text-brown-800 mb-2">
               Something went wrong
             </h1>
-            <p class="font-nunito text-brown-500 mb-4">
+            <p class="font-body text-brown-500 mb-4">
               {this.state.error?.message || "An unexpected error occurred"}
             </p>
             <button
               onClick={() => window.location.reload()}
-              class="px-6 py-2 rounded-2xl bg-brown-700 text-white font-nunito font-semibold hover:bg-brown-800 transition-colors"
+              class="px-6 py-2 rounded-2xl bg-brown-700 text-white font-body font-semibold hover:bg-brown-800 transition-colors"
             >
               Reload
             </button>

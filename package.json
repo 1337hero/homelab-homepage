@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --port 4001",
     "build": "vite build",
-    "preview": "vite preview"
+    "start": "bun server.js"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.10.3",
@@ -21,7 +21,9 @@
   "dependencies": {
     "@tanstack/react-query": "^5.90.21",
     "@tanstack/react-router": "^1.162.9",
+    "node-ical": "^0.25.4",
     "preact": "^10.28.4",
-    "remixicon": "^4.9.1"
+    "remixicon": "^4.9.1",
+    "systeminformation": "^5.31.1"
   }
 }

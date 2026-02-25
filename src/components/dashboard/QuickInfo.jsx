@@ -14,7 +14,7 @@ function InfoChip({ label, value, icon, color }) {
         <i class={`${icon} text-base`} aria-hidden="true" />
       </div>
       <span class="font-mono text-sm font-bold text-brown-800">{value}</span>
-      <span class="font-nunito text-[11px] font-semibold text-brown-400 uppercase tracking-wider">
+      <span class="font-body text-[11px] font-semibold text-brown-400 uppercase tracking-wider">
         {label}
       </span>
     </div>
@@ -31,7 +31,7 @@ export default function QuickInfo({ stats, serviceCount }) {
         <div class="w-9 h-9 rounded-xl bg-[#22C55E]/15 flex items-center justify-center">
           <i class="ri-information-line text-lg text-[#22C55E]" aria-hidden="true" />
         </div>
-        <h2 class="font-fredoka text-xl font-semibold text-brown-800">
+        <h2 class="font-display text-xl font-semibold text-brown-800">
           Quick Info
         </h2>
       </div>
