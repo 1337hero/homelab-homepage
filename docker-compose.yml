@@ -10,5 +10,8 @@ services:
       - ./data/services.json:/app/data/services.json
     environment:
       - HOST_FS=/hostfs
-      - ICAL_URL=${ICAL_URL}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - GOOGLE_REFRESH_TOKEN=${GOOGLE_REFRESH_TOKEN}
+      - GOOGLE_CALENDAR_ID=${GOOGLE_CALENDAR_ID}
     restart: unless-stopped

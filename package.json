@@ -21,7 +21,6 @@
   "dependencies": {
     "@tanstack/react-query": "^5.90.21",
     "@tanstack/react-router": "^1.162.9",
-    "node-ical": "^0.25.4",
     "preact": "^10.28.4",
     "remixicon": "^4.9.1",
     "systeminformation": "^5.31.1"
