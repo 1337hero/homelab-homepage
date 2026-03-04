@@ -1,30 +1,17 @@
-import { useEffect, useState } from "preact/hooks"
+import { useQuery } from "@tanstack/react-query"
 
-export function useCalendar(interval = 5 * 60 * 1000) {
-  const [events, setEvents] = useState([])
-  const [error, setError] = useState(null)
+async function fetchCalendar() {
+  const res = await fetch("/api/calendar")
+  if (!res.ok) throw new Error(res.statusText)
+  return res.json()
+}
 
-  useEffect(() => {
-    let active = true
-
-    async function fetchEvents() {
-      try {
-        const res = await fetch("/api/calendar")
-        if (!res.ok) throw new Error(res.statusText)
-        const data = await res.json()
-        if (active) {
-          setEvents(data)
-          setError(null)
-        }
-      } catch (e) {
-        if (active) setError(e.message)
-      }
-    }
-
-    fetchEvents()
-    const id = setInterval(fetchEvents, interval)
-    return () => { active = false; clearInterval(id) }
-  }, [interval])
-
+export function useCalendar() {
+  const { data: events = [], error } = useQuery({
+    queryKey: ["calendar"],
+    queryFn: fetchCalendar,
+    staleTime: 5 * 60 * 1000,
+    refetchInterval: 5 * 60 * 1000,
+  })
   return { events, error }
 }

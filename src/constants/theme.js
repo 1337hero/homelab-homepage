@@ -14,8 +14,3 @@ export const CATEGORY_THEMES = {
   tools: { color: COLORS.orange, emoji: "🧰", label: "Toolbox" },
 }
 
-export const STATUS_LABELS = {
-  online: { dot: "bg-green-400", label: "Happy" },
-  warning: { dot: "bg-yellow-400", label: "Hmm" },
-  offline: { dot: "bg-red-400", label: "Uh-oh" },
-}

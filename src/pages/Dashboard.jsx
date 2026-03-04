@@ -7,12 +7,33 @@ import { useServices } from "@/hooks/useServices";
 import { useStats } from "@/hooks/useStats";
 import { useState } from "preact/hooks";
 
+function StatsPanelSkeleton() {
+  return (
+    <div class="bg-white rounded-3xl border-2 border-border-light p-5 animate-pulse">
+      <div class="flex items-center gap-2 mb-5">
+        <div class="w-9 h-9 rounded-xl bg-cream-dark" />
+        <div class="h-5 w-28 rounded-lg bg-cream-dark" />
+      </div>
+      <div class="grid grid-cols-2 gap-3 mb-4">
+        <div class="h-20 rounded-2xl bg-cream-dark" />
+        <div class="h-20 rounded-2xl bg-cream-dark" />
+      </div>
+      <div class="space-y-4">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} class="space-y-1.5">
+            <div class="h-4 w-24 rounded bg-cream-dark" />
+            <div class="h-3 w-full rounded-full bg-cream-dark" />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export default function Dashboard() {
   const { services } = useServices()
-  const { stats, error } = useStats(3000)
+  const { data: stats, isLoading: statsLoading } = useStats()
   const [search, setSearch] = useState("")
-  const onlineCount = services.filter((s) => s.status === "online").length
-
   const filteredServices = search.trim()
     ? services.filter(
         (s) =>
@@ -35,7 +56,7 @@ export default function Dashboard() {
 
         <aside class="space-y-6">
           <CalendarWidget />
-          {stats && <StatsPanel stats={stats} serviceCount={`${onlineCount}/${services.length}`} />}
+          {statsLoading ? <StatsPanelSkeleton /> : stats && <StatsPanel stats={stats} serviceCount={services.length} />}
         </aside>
       </div>
     </>

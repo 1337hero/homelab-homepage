@@ -1,4 +1,3 @@
-import { STATUS_LABELS } from "@/constants/theme"
 import { useState } from "preact/hooks"
 
 function CopyButton({ text }) {
@@ -50,7 +49,6 @@ function ServerDetails({ details }) {
 }
 
 export default function ServiceTile({ service, delay }) {
-  const statusInfo = STATUS_LABELS[service.status]
   const isInfo = service.type === "info"
   const Tag = isInfo ? "div" : "a"
 
@@ -80,12 +78,6 @@ export default function ServiceTile({ service, delay }) {
             <i class={`${service.icon} text-2xl`} aria-hidden="true" />
           </div>
 
-          <div class="flex items-center gap-1.5">
-            <div class={`w-2.5 h-2.5 rounded-full ${statusInfo.dot} ${service.status === "warning" ? "animate-pulse-fade" : ""}`} />
-            <span class="text-xs font-body font-semibold text-brown-400">
-              {statusInfo.label}
-            </span>
-          </div>
         </div>
 
         <h3 class="font-display text-lg font-semibold text-brown-800 mb-1 group-hover:text-brown-900">
