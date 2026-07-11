@@ -59,10 +59,16 @@ test("deploy validates, publishes, updates the homelab, and checks its health", 
   expect(logs.at(-1)).toBe("Deployment complete.")
 })
 
-test("health check waits for both live APIs to return arrays", async () => {
+test("health check validates services, calendar, and host metrics", async () => {
   const requests = []
   const fetchImpl = async (url) => {
     requests.push(url)
+    if (url.endsWith("/api/stats")) {
+      return Response.json({
+        services: { running: 3, containers: 5 },
+        disks: [{ name: "System", used: 40, total: 250 }],
+      })
+    }
     return Response.json([{ id: "ok" }])
   }
 
@@ -74,15 +80,22 @@ test("health check waits for both live APIs to return arrays", async () => {
   expect(requests).toEqual([
     "http://homepage.test/api/services",
     "http://homepage.test/api/calendar",
+    "http://homepage.test/api/stats",
   ])
 })
 
 test("health check retries while the container starts", async () => {
   let requestCount = 0
   let sleepCount = 0
-  const fetchImpl = async () => {
+  const fetchImpl = async (url) => {
     requestCount += 1
     if (requestCount === 1) return new Response("Starting", { status: 503 })
+    if (url.endsWith("/api/stats")) {
+      return Response.json({
+        services: { running: 3, containers: 5 },
+        disks: [{ name: "System", used: 40, total: 250 }],
+      })
+    }
     return Response.json([])
   }
 
@@ -94,7 +107,7 @@ test("health check retries while the container starts", async () => {
     },
   })
 
-  expect(requestCount).toBe(3)
+  expect(requestCount).toBe(4)
   expect(sleepCount).toBe(1)
 })
 

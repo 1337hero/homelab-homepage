@@ -34,6 +34,17 @@ async function checkHealth(baseUrl, {
         const data = await response.json()
         if (!Array.isArray(data)) throw new Error(`${url} returned an unexpected response.`)
       }
+
+      const statsUrl = new URL("api/stats", root).toString()
+      const statsResponse = await fetchImpl(statsUrl)
+      if (!statsResponse.ok) {
+        throw new Error(`${statsUrl} returned HTTP ${statsResponse.status}.`)
+      }
+
+      const stats = await statsResponse.json()
+      if (!Number.isInteger(stats.services?.running) || !stats.disks?.length) {
+        throw new Error(`${statsUrl} is missing Docker or disk metrics.`)
+      }
       return
     } catch (error) {
       lastError = error

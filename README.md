@@ -136,19 +136,25 @@ Server stats come from `systeminformation` in [`api/stats.js`](/home/mikekey/Bui
 Collected metrics:
 - CPU current load (`si.currentLoad`) -> `cpu`
 - Memory usage (`si.mem`) -> `ram.used`, `ram.total`
-- Filesystem usage (`si.fsSize`) -> `disk.used`, `disk.total`
+- Configured filesystem usage (`si.fsSize`) -> `disks`
 - CPU temperature (`si.cpuTemperature`) -> `temp`
 - System uptime (`si.time`) -> `uptime`
+- Running Docker applications and containers -> `services.running`, `services.containers`
 
 Dashboard behavior:
 - `useStats` polls every 3 seconds and computes `cpuPercent`, `ramPercent`, and `diskPercent`.
 - `StatsPanel` shows:
   - Uptime chip (`Xd Yh`)
-  - Service count chip (based on loaded services)
-  - CPU, RAM, Disk, and Temp bars/values
-- Disk source:
-  - If `HOST_FS` is set (Docker uses `/hostfs`), the API uses that mount when available.
-  - Otherwise it falls back to `/`.
+  - Docker application count
+  - CPU, RAM, configured disks, and temperature
+- Docker application count:
+  - Containers with the same `com.docker.compose.project` label count as one application.
+  - Each standalone container counts as one application.
+  - The Compose stack exposes only read-only container metadata through a private Docker socket proxy. The proxy publishes no host port and rejects POST requests.
+- Disk sources:
+  - `HOST_DISK_MOUNTS` lists host mounts exposed under `/hostfs`.
+  - The default Compose configuration reports `/` as System and `/mnt/storage` as Storage.
+  - Local development reads `/` and `/mnt/storage` directly when the variable is unset.
 
 ## Docker
 

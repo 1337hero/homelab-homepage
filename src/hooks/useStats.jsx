@@ -1,15 +1,10 @@
 import { useQuery } from "@tanstack/react-query"
+import { normalizeStats } from "@/data/stats"
 
 async function fetchStats() {
   const res = await fetch("/api/stats")
   if (!res.ok) throw new Error(res.statusText)
-  const raw = await res.json()
-  return {
-    ...raw,
-    cpuPercent: Math.round(raw.cpu),
-    ramPercent: Math.round((raw.ram.used / raw.ram.total) * 100),
-    diskPercent: Math.round((raw.disk.used / raw.disk.total) * 100),
-  }
+  return normalizeStats(await res.json())
 }
 
 export function useStats() {

@@ -10,9 +10,33 @@ services:
       - ./data/services.json:/app/data/services.json
     environment:
       - HOST_FS=/hostfs
+      - HOST_DISK_MOUNTS=/hostfs,/hostfs/mnt/storage
+      - DOCKER_API_URL=http://dockerproxy:2375
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - GOOGLE_REFRESH_TOKEN=${GOOGLE_REFRESH_TOKEN}
       - GOOGLE_CALENDAR_ID=${GOOGLE_CALENDAR_ID}
       - GOOGLE_CALENDAR_IDS=${GOOGLE_CALENDAR_IDS}
+    depends_on:
+      - dockerproxy
+    networks:
+      - default
+      - docker-api
     restart: unless-stopped
+
+  dockerproxy:
+    image: ghcr.io/tecnativa/docker-socket-proxy:v0.4.2
+    privileged: true
+    environment:
+      - CONTAINERS=1
+      - POST=0
+      - LOG_LEVEL=warning
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - docker-api
+    restart: unless-stopped
+
+networks:
+  docker-api:
+    internal: true

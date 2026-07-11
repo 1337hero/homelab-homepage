@@ -41,8 +41,8 @@ function StatMini({ label, value, percent, color, icon }) {
   )
 }
 
-export default function StatsPanel({ stats, serviceCount }) {
-  const { cpuPercent, ramPercent, diskPercent } = stats
+export default function StatsPanel({ stats }) {
+  const { cpuPercent, ramPercent } = stats
 
   return (
     <div
@@ -60,7 +60,7 @@ export default function StatsPanel({ stats, serviceCount }) {
 
       <div class="grid grid-cols-2 gap-3 mb-4">
         <InfoChip label="Uptime" value={formatUptime(stats.uptime)} icon="ri-time-line" color={COLORS.green} />
-        <InfoChip label="Services" value={serviceCount} icon="ri-apps-2-line" color={COLORS.blue} />
+        <InfoChip label="Docker Apps" value={stats.services?.running ?? "—"} icon="ri-apps-2-line" color={COLORS.blue} />
       </div>
 
       <div class="space-y-4">
@@ -78,13 +78,16 @@ export default function StatsPanel({ stats, serviceCount }) {
           color={COLORS.green}
           icon="ri-ram-line"
         />
-        <StatMini
-          label="Disk"
-          value={`${formatBytes(stats.disk.used)} / ${formatBytes(stats.disk.total)}`}
-          percent={diskPercent}
-          color={COLORS.orange}
-          icon="ri-hard-drive-3-line"
-        />
+        {stats.disks.map((disk) => (
+          <StatMini
+            key={disk.mount || disk.name}
+            label={disk.name}
+            value={`${formatBytes(disk.used)} / ${formatBytes(disk.total)}`}
+            percent={disk.percent}
+            color={COLORS.orange}
+            icon="ri-hard-drive-3-line"
+          />
+        ))}
         <StatMini
           label="Temp"
           value={`${stats.temp}°C`}

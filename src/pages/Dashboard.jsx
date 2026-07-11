@@ -19,7 +19,7 @@ function StatsPanelSkeleton() {
         <div class="h-20 rounded-2xl bg-cream-dark" />
       </div>
       <div class="space-y-4">
-        {[...Array(4)].map((_, i) => (
+        {[...Array(5)].map((_, i) => (
           <div key={i} class="space-y-1.5">
             <div class="h-4 w-24 rounded bg-cream-dark" />
             <div class="h-3 w-full rounded-full bg-cream-dark" />
@@ -56,7 +56,7 @@ export default function Dashboard() {
 
         <aside class="space-y-6">
           <CalendarWidget />
-          {statsLoading ? <StatsPanelSkeleton /> : stats && <StatsPanel stats={stats} serviceCount={services.length} />}
+          {statsLoading ? <StatsPanelSkeleton /> : stats && <StatsPanel stats={stats} />}
         </aside>
       </div>
     </>
