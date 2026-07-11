@@ -9,9 +9,9 @@
     "order": 0
   },
   {
-    "name": "Plex",
+    "name": "JellyFin",
     "icon": "ri-movie-2-line",
-    "url": "http://192.168.1.5:32400/web/index.html#!/",
+    "url": "http://192.168.1.5:8096/web/#/home",
     "category": "media",
     "color": "#E5A00D",
     "description": "Movies & TV Shows",
@@ -70,7 +70,7 @@
     "category": "family",
     "color": "#F43F5E",
     "description": "Health & Fitness",
-    "order": 3
+    "order": 5
   },
   {
     "name": "Karakeep",
@@ -79,7 +79,16 @@
     "category": "family",
     "color": "#F59E0B",
     "description": "Bookmarks & Save Anything",
-    "order": 2
+    "order": 4
+  },
+  {
+    "name": "VaultWarden",
+    "icon": "ri-bookmark-3-line",
+    "url": "https://vault.mk3y.com/",
+    "category": "family",
+    "color": "#F59E0B",
+    "description": "Passwords & Security",
+    "order": 3
   },
   {
     "name": "Dockge",
