@@ -36,16 +36,22 @@ GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 GOOGLE_REFRESH_TOKEN=
 GOOGLE_CALENDAR_ID=
+GOOGLE_CALENDAR_IDS=
 ```
 
 The calendar API returns `[]` when these variables are missing.
+
+Use `GOOGLE_CALENDAR_IDS` for multiple calendars as a comma-separated list. It takes precedence over the backward-compatible `GOOGLE_CALENDAR_ID` setting:
+
+```env
+GOOGLE_CALENDAR_IDS=primary,family-calendar-id@group.calendar.google.com
+```
 
 ## Google Calendar OAuth2 Setup
 
 This project uses Google Calendar API with OAuth2 refresh tokens (no public iCal URL).
 
-1. Ensure your Google OAuth client allows redirect URI:
-   - `http://localhost:8085/callback`
+1. Create or download a Google OAuth client with application type **Desktop app**. The helper uses the supported loopback callback `http://127.0.0.1:8085`.
 2. Run the one-time auth helper:
 
 ```bash
@@ -56,8 +62,14 @@ bun scripts/google-auth.js
 4. Copy the printed `GOOGLE_REFRESH_TOKEN` into `.env`.
 5. Set `GOOGLE_CALENDAR_ID` to the target calendar ID.
 
+When running the helper on the deployment host, it can update the ignored `.env` file without printing the token:
+
+```bash
+bun scripts/google-auth.js --update-env
+```
+
 Notes:
-- The script requests `https://www.googleapis.com/auth/calendar.events.readonly`.
+- The script requests `https://www.googleapis.com/auth/calendar.readonly` so it can discover calendar names and read events. It cannot create, edit, or delete calendar data.
 - It uses `access_type=offline` and `prompt=consent` so Google returns a refresh token.
 
 ## API Endpoints
@@ -140,9 +152,39 @@ Dashboard behavior:
 
 ## Docker
 
-`docker-compose.yml` passes the Google Calendar env vars into the container.
+`compose.yaml` passes the Google Calendar env vars into the container. Set either `GOOGLE_CALENDAR_ID` for one calendar or `GOOGLE_CALENDAR_IDS` for a comma-separated list.
 The app is exposed on `http://localhost:5000`.
 
 ```bash
 docker compose up -d --build
+```
+
+## Deploy
+
+Commit your changes, then deploy from the project root:
+
+```bash
+bun run deploy
+```
+
+The command:
+
+1. Requires a clean local working tree.
+2. Runs the test suite and production build.
+3. Pushes the current branch to `origin`.
+4. Requires a clean homelab checkout.
+5. Fast-forwards `/opt/stacks/homepage` to the pushed branch.
+6. Rebuilds the `homepage` service with `compose.yaml`.
+7. Verifies that `/api/services` and `/api/calendar` return valid arrays.
+
+The homelab keeps secrets in its ignored `.env` file; deployment never copies that file. `.dockerignore` also excludes dotenv and downloaded OAuth credential files from Docker's build context.
+
+Override deployment targets when needed:
+
+```bash
+DEPLOY_HOST=homelab \
+DEPLOY_DIR=/opt/stacks/homepage \
+DEPLOY_URL=http://192.168.1.3:5000 \
+DEPLOY_SSH_CONFIG="$HOME/.ssh/config" \
+bun run deploy
 ```

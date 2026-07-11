@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite --port 4001",
     "build": "vite build",
-    "start": "bun server.js"
+    "start": "bun server.js",
+    "deploy": "bun scripts/deploy.js"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.10.3",

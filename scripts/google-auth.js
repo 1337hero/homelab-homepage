@@ -1,5 +1,6 @@
-const DEFAULT_REDIRECT_URI = "http://localhost:8085/callback"
-const SCOPE = "https://www.googleapis.com/auth/calendar.events.readonly"
+const DEFAULT_REDIRECT_URI = "http://127.0.0.1:8085"
+const SCOPE = "https://www.googleapis.com/auth/calendar.readonly"
+const UPDATE_ENV = process.argv.includes("--update-env")
 
 function getEnvOrPrompt(name, promptText) {
   const value = process.env[name]
@@ -44,6 +45,18 @@ async function exchangeCodeForTokens({ code, clientId, clientSecret, redirectUri
   }
 
   return res.json()
+}
+
+async function updateRefreshToken(refreshToken) {
+  const envPath = ".env"
+  const envFile = Bun.file(envPath)
+  const current = await envFile.exists() ? await envFile.text() : ""
+  const setting = `GOOGLE_REFRESH_TOKEN=${refreshToken}`
+  const updated = /^GOOGLE_REFRESH_TOKEN=.*$/m.test(current)
+    ? current.replace(/^GOOGLE_REFRESH_TOKEN=.*$/m, setting)
+    : `${current}${current && !current.endsWith("\n") ? "\n" : ""}${setting}\n`
+
+  await Bun.write(envPath, updated)
 }
 
 async function run() {
@@ -151,13 +164,14 @@ async function run() {
     process.exit(1)
   }
 
-  console.log("\nRefresh token obtained:\n")
+  if (UPDATE_ENV) {
+    await updateRefreshToken(tokens.refresh_token)
+    console.log("Refresh token saved to .env.")
+    return
+  }
+
+  console.log("\nRefresh token obtained. Add this value to GOOGLE_REFRESH_TOKEN in .env:\n")
   console.log(tokens.refresh_token)
-  console.log("\nAdd to .env:\n")
-  console.log(`GOOGLE_CLIENT_ID=${clientId}`)
-  console.log(`GOOGLE_CLIENT_SECRET=${clientSecret}`)
-  console.log(`GOOGLE_REFRESH_TOKEN=${tokens.refresh_token}`)
-  console.log("GOOGLE_CALENDAR_ID=<your-calendar-id>")
 }
 
 run().catch((err) => {

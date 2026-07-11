@@ -2,6 +2,7 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET
 const GOOGLE_REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN
 const GOOGLE_CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID
+const GOOGLE_CALENDAR_IDS = process.env.GOOGLE_CALENDAR_IDS
 
 const TOKEN_URL = "https://oauth2.googleapis.com/token"
 const CALENDAR_BASE_URL = "https://www.googleapis.com/calendar/v3"
@@ -29,7 +30,14 @@ function formatDate(date) {
 }
 
 function hasGoogleConfig() {
-  return Boolean(GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET && GOOGLE_REFRESH_TOKEN && GOOGLE_CALENDAR_ID)
+  return Boolean(GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET && GOOGLE_REFRESH_TOKEN && getCalendarIds().length)
+}
+
+function getCalendarIds() {
+  return (GOOGLE_CALENDAR_IDS || GOOGLE_CALENDAR_ID || "")
+    .split(",")
+    .map((id) => id.trim())
+    .filter(Boolean)
 }
 
 async function refreshAccessToken() {
@@ -90,10 +98,10 @@ function parseGoogleStart(start) {
   return { date: null, allDay: false }
 }
 
-async function fetchGoogleEvents(accessToken) {
+async function fetchGoogleEvents(accessToken, configuredCalendarId) {
   const now = new Date()
   const cutoff = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)
-  const calendarId = encodeURIComponent(GOOGLE_CALENDAR_ID)
+  const calendarId = encodeURIComponent(configuredCalendarId)
 
   const params = new URLSearchParams({
     timeMin: now.toISOString(),
@@ -122,6 +130,8 @@ function mapEvents(items) {
         date: formatDate(date),
         color: colorFromTitle(title),
         icon: "ri-calendar-event-line",
+        startTime: date.getTime(),
+        dedupeKey: `${event.iCalUID || event.id || title}:${date.getTime()}`,
       }
     })
     .filter(Boolean)
@@ -131,24 +141,39 @@ async function fetchEvents() {
   if (!hasGoogleConfig()) return []
   if (Date.now() - eventCache.ts < CACHE_TTL) return eventCache.events
 
+  const calendarIds = getCalendarIds()
   let accessToken = await getAccessToken()
-  let res = await fetchGoogleEvents(accessToken)
+  let responses = await Promise.all(calendarIds.map((calendarId) => fetchGoogleEvents(accessToken, calendarId)))
 
-  if (res.status === 401) {
+  if (responses.some((res) => res.status === 401)) {
     accessToken = await getAccessToken({ forceRefresh: true })
-    res = await fetchGoogleEvents(accessToken)
+    responses = await Promise.all(calendarIds.map((calendarId) => fetchGoogleEvents(accessToken, calendarId)))
+  }
+  const events = []
+
+  for (const res of responses) {
+    if (!res.ok) {
+      const errorText = await res.text()
+      throw new Error(`Google Calendar events request failed (${res.status}): ${errorText}`)
+    }
+
+    const data = await res.json()
+    events.push(...mapEvents(data.items))
   }
 
-  if (!res.ok) {
-    const errorText = await res.text()
-    throw new Error(`Google Calendar events request failed (${res.status}): ${errorText}`)
-  }
+  events.sort((a, b) => a.startTime - b.startTime)
+  const seenEvents = new Set()
+  const upcomingEvents = events
+    .filter((event) => {
+      if (seenEvents.has(event.dedupeKey)) return false
+      seenEvents.add(event.dedupeKey)
+      return true
+    })
+    .slice(0, 8)
+    .map(({ startTime: _startTime, dedupeKey: _dedupeKey, ...event }) => event)
 
-  const data = await res.json()
-  const events = mapEvents(data.items)
-
-  eventCache = { events, ts: Date.now() }
-  return events
+  eventCache = { events: upcomingEvents, ts: Date.now() }
+  return upcomingEvents
 }
 
 export { fetchEvents }
