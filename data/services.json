@@ -91,13 +91,22 @@
     "order": 3
   },
   {
-    "name": "Dockge",
-    "icon": "ri-ship-line",
-    "url": "http://dockge.mk3y.com",
+    "name": "Proxmox",
+    "icon": "ri-server-line",
+    "url": "https://192.168.1.4:8006/",
     "category": "infrastructure",
-    "color": "#06B6D4",
-    "description": "Container Management",
+    "color": "#E97627",
+    "description": "Virtualization",
     "order": 0
+  },
+  {
+    "name": "OPNsense",
+    "icon": "ri-router-line",
+    "url": "https://192.168.1.1/",
+    "category": "infrastructure",
+    "color": "#22C55E",
+    "description": "Firewall & Router",
+    "order": 1
   },
   {
     "name": "Pi-Hole",
@@ -106,25 +115,25 @@
     "category": "infrastructure",
     "color": "#EF4444",
     "description": "DNS & Ad Blocking",
-    "order": 1
+    "order": 2
   },
   {
-    "name": "Proxmox",
-    "icon": "ri-server-line",
-    "url": "https://192.168.1.4:8006/",
+    "name": "Dockge",
+    "icon": "ri-ship-line",
+    "url": "http://dockge.mk3y.com",
     "category": "infrastructure",
-    "color": "#E97627",
-    "description": "Virtualization",
-    "order": 2
+    "color": "#06B6D4",
+    "description": "Container Management",
+    "order": 3
   },
   {
     "name": "Headscale",
     "icon": "ri-route-line",
-    "url": "http://headscale.home.local",
+    "url": "https://magic.mk3y.com/admin/",
     "category": "infrastructure",
     "color": "#3B82F6",
     "description": "VPN Mesh Network",
-    "order": 3
+    "order": 4
   },
   {
     "name": "FasterChat",
