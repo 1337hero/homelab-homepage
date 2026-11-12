@@ -94,7 +94,7 @@ async function deploy({
 
   const host = env.DEPLOY_HOST || "homelab"
   const remoteDir = env.DEPLOY_DIR || "/opt/stacks/homepage"
-  const baseUrl = env.DEPLOY_URL || "http://192.168.1.3:5000"
+  const baseUrl = env.DEPLOY_URL || "http://10.10.0.20:5000"
   const sshConfig = env.DEPLOY_SSH_CONFIG || `${env.HOME}/.ssh/config`
 
   log("Running tests...")

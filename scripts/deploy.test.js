@@ -37,7 +37,7 @@ test("deploy validates, publishes, updates the homelab, and checks its health", 
       HOME: "/home/tester",
       DEPLOY_HOST: "homelab",
       DEPLOY_DIR: "/opt/stacks/homepage",
-      DEPLOY_URL: "http://192.168.1.3:5000",
+      DEPLOY_URL: "http://10.10.0.20:5000",
     },
   })
 
@@ -55,7 +55,7 @@ test("deploy validates, publishes, updates the homelab, and checks its health", 
     "homelab",
     expect.stringContaining("docker compose -f compose.yaml up -d --build --remove-orphans"),
   ])
-  expect(calls[6]).toEqual(["health", "http://192.168.1.3:5000"])
+  expect(calls[6]).toEqual(["health", "http://10.10.0.20:5000"])
   expect(logs.at(-1)).toBe("Deployment complete.")
 })
 

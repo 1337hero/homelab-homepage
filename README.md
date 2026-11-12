@@ -190,7 +190,7 @@ Override deployment targets when needed:
 ```bash
 DEPLOY_HOST=homelab \
 DEPLOY_DIR=/opt/stacks/homepage \
-DEPLOY_URL=http://192.168.1.3:5000 \
+DEPLOY_URL=http://10.10.0.20:5000 \
 DEPLOY_SSH_CONFIG="$HOME/.ssh/config" \
 bun run deploy
 ```
